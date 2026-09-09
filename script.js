@@ -215,7 +215,7 @@ extractBtn.addEventListener('click', async () => {
         formData.append('taskType', currentTaskType);
         processingProgress.style.width = '70%';
         loadingStatus.textContent = 'Generating...';
-        const response = await fetch('/api/extract', {
+        const response = await fetch('https://vision-backend-api.onrender.com', {
             method: 'POST',
             body: formData
         });
