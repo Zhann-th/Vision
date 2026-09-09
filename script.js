@@ -22,6 +22,7 @@ const clearBtn = document.getElementById('clearBtn');
 const addMoreBtn = document.getElementById('addMoreBtn');
 const extractBtn = document.getElementById('extractBtn');
 const rawTextInput = document.getElementById('rawTextInput');
+const resultBox = document.getElementById('resultBox');
 const loadingState = document.getElementById('loadingState');
 const finalState = document.getElementById('finalState');
 const loadingStatus = document.getElementById('loadingStatus');
@@ -179,6 +180,7 @@ clearBtn.addEventListener('click', (e) => {
     uploadContent.classList.remove('hidden');
     extractBtn.disabled = rawTextInput.value.trim().length === 0;
     uploadArea.classList.remove('has-image');
+    resultBox.classList.add('hidden');
     finalState.classList.add('hidden');
     loadingState.classList.add('hidden');
     extractedText.value = '';
@@ -192,6 +194,7 @@ extractBtn.addEventListener('click', async () => {
         alert("Please upload a file or paste some text first.");
         return;
     }
+    resultBox.classList.remove('hidden');
     finalState.classList.add('hidden');
     loadingState.classList.remove('hidden');
     extractBtn.disabled = true;
@@ -262,11 +265,6 @@ extractBtn.addEventListener('click', async () => {
         } else {
             extractedText.value = data.text;
             livePreviewFrame.srcdoc = data.text;
-            const generatedWindow = window.open('about:blank', '_blank');
-            if (generatedWindow) {
-                generatedWindow.document.write(data.text);
-                generatedWindow.document.close();
-            }
             tabPreview.click();
         }
     } catch (err) {
