@@ -10,7 +10,7 @@ async function findWorkingModel() {
         "gemini-3.5-flash"
     ];
 
-    for (const model of modelsToTry) {
+    for (var model of modelsToTry) {
         console.log(`Trying ${model}...`);
         try {
             const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`, {
@@ -24,7 +24,7 @@ async function findWorkingModel() {
             const data = await res.json();
             if (res.ok) {
                 console.log(`✅ SUCCESS with ${model}:`, data.candidates[0].content.parts[0].text);
-                return model; // Stop on first success
+                return model; 
             } else {
                 console.log(`❌ FAILED with ${model}:`, res.status, data.error?.message);
             }
@@ -33,4 +33,4 @@ async function findWorkingModel() {
         }
     }
 }
-findWorkingModel();
+findWorkingModel()

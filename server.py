@@ -4,17 +4,17 @@ import json
 import cgi
 import time
 
-PORT = 3001 # Changed port just in case the old one is hanging
+PORT = 3001 
 
 class CustomHandler(http.server.SimpleHTTPRequestHandler):
     def do_POST(self):
         if self.path == '/api/extract':
             ctype, pdict = cgi.parse_header(self.headers.get('content-type'))
             if ctype == 'multipart/form-data':
-                # Fake processing time to show the loading UI
+                
                 time.sleep(2)
                 
-                # Mock the OCR response since we don't have a real AI OCR model running locally
+                
                 response_data = {
                     "text": "This is a simulated OCR result.\nThe neural network successfully processed your image.\n\nHandwriting recognized:\n'Hello World! This is an amazing AI OCR app!'"
                 }
