@@ -1,34 +1,14 @@
 # VISION AI Studio
 
-**VISION** (formerly gemini-research) is a multimodal AI workspace that leverages the Gemini API to turn sketches into code, perform advanced OCR, and extract structured data from images and documents.
+VISION (previously called gemini-research) is a multimodal workspace I built around the Gemini API. The main idea was to see how well an AI could handle visual tasks like turning hand-drawn sketches into working code, or extracting structured data from messy documents.
 
-## Features
-- **Sketch to Code (Strict & Creative Modes):** Upload a hand-drawn wireframe or UI sketch, and VISION generates a clean, responsive HTML/CSS website. The "Creative" mode acts as an autonomous UI/UX designer.
-- **Context-Aware OCR:** Extracts handwritten and printed text accurately, preserving document structure and correcting obvious handwriting errors.
-- **Data Extraction:** Parses complex grid-like information (invoices, receipts, tables) into clean JSON structures.
-- **Dark IDE Aesthetic:** A floating window, premium dark-mode interface built with CSS glassmorphism.
+## What it can do
+- **Sketch to Code:** You can upload a wireframe or a rough sketch, and it will generate the HTML and CSS for it. There is a strict mode for exact copies and a creative mode where the AI takes some design liberties.
+- **OCR and Data Extraction:** It reads handwritten or printed text and can parse things like invoices or tables into clean JSON data.
+- **Interface:** I built the UI to look like a clean, floating dark-mode IDE using CSS glassmorphism.
 
-## Tech Stack
-- **AI Core:** Google Gemini API (Multimodal Inference)
-- **Backend:** Node.js, Express, Multer (for file handling)
-- **Frontend:** Vanilla JavaScript, HTML5, Modern CSS Variables
-
-## Running Locally
-
-1. **Install Dependencies:**
-   ```bash
-   npm install
-   ```
-
-2. **Environment Variables:**
-   Create a `.env` file in the root directory and add your Gemini API key:
-   ```env
-   GEMINI_API_KEY=your_api_key_here
-   PORT=3000
-   ```
-
-3. **Start the Server:**
-   ```bash
-   node server.js
-   ```
-   Then, open `http://localhost:3000` in your browser.
+## Running the project locally
+1. Run npm install to get the dependencies.
+2. Create a .env file and add your GEMINI_API_KEY. You can also specify a PORT (defaults to 3000).
+3. Start the server with node server.js.
+4. Open http://localhost:3000 in your browser.
