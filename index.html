@@ -3,286 +3,1050 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Handwriting OCR & Sketch to Code</title>
-    <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>VISION AI — Sketch to Code, OCR, Data Extraction</title>
+    <meta name="description" content="VISION AI converts hand-drawn wireframes into functional code, digitizes handwritten text with OCR, and extracts structured data from documents using multimodal AI.">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
-    <script type="module" src="script.js"></script>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg: #F7F7F2;
+            --fg: #1A1A1A;
+            --muted: #6B6B6B;
+            --subtle: #9A9A8E;
+            --border: #E2E2D6;
+            --surface: #FFFFFF;
+            --dark-bg: #1A1A1A;
+            --dark-fg: #F0F0E8;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg);
+            color: var(--fg);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ── Global layout wrapper ── */
+        .wrap {
+            width: 100%;
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: 0 80px;
+        }
+
+        @media (max-width: 1100px) { .wrap { padding: 0 48px; } }
+        @media (max-width: 640px)  { .wrap { padding: 0 24px; } }
+
+        a { color: inherit; text-decoration: none; }
+
+        /* ── NAV ── */
+        .nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 28px 0;
+        }
+
+        .nav-logo {
+            font-size: 22px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: -0.05em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 36px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .nav-links a { color: var(--muted); transition: color 0.2s; }
+        .nav-links a:hover { color: var(--fg); }
+
+        .nav-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 22px;
+            background: var(--fg);
+            color: #fff;
+            border-radius: 100px;
+            font-size: 14px;
+            font-weight: 700;
+            transition: opacity 0.2s, transform 0.2s;
+        }
+
+        .nav-btn:hover { opacity: 0.85; transform: translateY(-1px); }
+
+        /* ── HERO ── */
+        .hero-section { padding: 12px 0 100px; }
+
+        .hero-kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--subtle);
+            margin-bottom: 28px;
+        }
+
+        .hero-kicker::before {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 2px;
+            background: var(--subtle);
+        }
+
+        .hero h1 {
+            font-size: clamp(44px, 6.5vw, 86px);
+            font-weight: 900;
+            letter-spacing: -0.04em;
+            line-height: 1.0;
+            max-width: 900px;
+            margin-bottom: 28px;
+        }
+
+        .hero h1 em {
+            font-style: normal;
+            color: var(--subtle);
+        }
+
+        .hero-sub {
+            font-size: clamp(16px, 1.8vw, 20px);
+            color: var(--muted);
+            max-width: 580px;
+            line-height: 1.7;
+            margin-bottom: 44px;
+        }
+
+        .hero-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 36px;
+            background: var(--fg);
+            color: #fff;
+            border-radius: 100px;
+            font-size: 16px;
+            font-weight: 800;
+            transition: opacity 0.2s, transform 0.25s;
+            box-shadow: 0 8px 28px rgba(0,0,0,0.18);
+        }
+
+        .btn-primary:hover { opacity: 0.88; transform: translateY(-2px); }
+
+        .btn-secondary {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--muted);
+            border-bottom: 2px solid var(--border);
+            transition: color 0.2s, border-color 0.2s;
+        }
+
+        .btn-secondary:hover { color: var(--fg); border-color: var(--fg); }
+
+        /* ── HERO VISUAL (Split: Sketch → Code) ── */
+        .hero-visual {
+            margin-top: 64px;
+            display: grid;
+            grid-template-columns: 1fr 52px 1fr;
+            align-items: center;
+            gap: 0;
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            overflow: hidden;
+            box-shadow: 0 16px 64px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04);
+            background: #fff;
+        }
+
+        .hv-panel {
+            display: flex;
+            flex-direction: column;
+            height: 420px;
+        }
+
+        .hv-left  { background: #FFFDF6; border-right: 1px solid var(--border); }
+        .hv-right { background: #1C1C1E; color: #D4D4D4; }
+
+        .hv-header {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            padding: 14px 18px;
+            border-bottom: 1px solid var(--border);
+            background: #F5F5F0;
+            flex-shrink: 0;
+        }
+
+        .hv-right .hv-header {
+            background: #2C2C2E;
+            border-bottom-color: #3A3A3C;
+        }
+
+        .hv-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 100px;
+            flex-shrink: 0;
+        }
+
+        .hv-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: #999;
+            margin-left: 6px;
+            font-family: monospace;
+        }
+
+        .hv-right .hv-title { color: #666; }
+
+        .hv-chip {
+            display: inline-flex;
+            padding: 3px 10px;
+            background: #ECEEE8;
+            border-radius: 100px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #888;
+        }
+
+        .hv-chip-green {
+            background: rgba(40, 200, 64, 0.12);
+            color: #16a34a;
+        }
+
+        .hv-sketch-area {
+            flex: 1;
+            padding: 16px;
+            overflow: hidden;
+        }
+
+        .sketch-svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .hv-code-area {
+            flex: 1;
+            padding: 20px 24px;
+            overflow: hidden;
+        }
+
+        .hv-code {
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            font-size: 12px;
+            line-height: 1.7;
+            white-space: pre;
+            animation: code-fade-in 1.2s ease 0.6s both;
+        }
+
+        @keyframes code-fade-in {
+            from { opacity: 0; transform: translateY(8px); }
+            to   { opacity: 1; transform: none; }
+        }
+
+        .c-tag  { color: #7CABF0; }
+        .c-attr { color: #9CDCFE; }
+        .c-str  { color: #CE9178; }
+
+        .hv-footer-bar {
+            padding: 10px 18px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            background: #F5F5F0;
+            flex-shrink: 0;
+        }
+
+        .hv-right .hv-footer-bar {
+            background: #2C2C2E;
+            border-top-color: #3A3A3C;
+        }
+
+        /* Arrow between panels */
+        .hv-arrow {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            background: #fff;
+            height: 100%;
+            border-left: 1px solid var(--border);
+            border-right: 1px solid var(--border);
+        }
+
+        .hv-arrow-line {
+            width: 2px;
+            height: 40px;
+            background: var(--border);
+        }
+
+        .hv-arrow-icon {
+            font-size: 20px;
+            color: var(--fg);
+            animation: pulse-arrow 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-arrow {
+            0%, 100% { opacity: 0.4; transform: translateX(0); }
+            50%       { opacity: 1;   transform: translateX(3px); }
+        }
+
+        /* ── DIVIDER ── */
+        .divider {
+            border: none;
+            border-top: 1px solid var(--border);
+        }
+
+        /* ── SECTION SHARED ── */
+        section { padding: 96px 0; }
+
+        .section-label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--subtle);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-label::before {
+            content: '';
+            display: inline-block;
+            width: 16px;
+            height: 2px;
+            background: var(--subtle);
+        }
+
+        /* ── HOW IT WORKS ── */
+        .how-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: start;
+        }
+
+        @media (max-width: 768px) { .how-grid { grid-template-columns: 1fr; gap: 48px; } }
+
+        .how-left h2 {
+            font-size: clamp(30px, 3.5vw, 48px);
+            font-weight: 900;
+            letter-spacing: -0.04em;
+            line-height: 1.1;
+            margin-bottom: 20px;
+        }
+
+        .how-left p {
+            font-size: 17px;
+            color: var(--muted);
+            line-height: 1.75;
+            margin-bottom: 32px;
+        }
+
+        .steps {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        .step {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        .step-num {
+            width: 36px;
+            height: 36px;
+            border-radius: 100px;
+            background: var(--fg);
+            color: #fff;
+            font-size: 14px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .step-body h4 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+        .step-body p  { font-size: 14px; color: var(--muted); line-height: 1.65; }
+
+        /* ── CAPABILITIES ── */
+        .caps-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2px;
+            background: var(--border);
+            border-radius: 24px;
+            overflow: hidden;
+        }
+
+        @media (max-width: 768px) { .caps-grid { grid-template-columns: 1fr; } }
+
+        .cap-card {
+            background: var(--surface);
+            padding: 40px 36px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            transition: background 0.2s;
+        }
+
+        .cap-card:hover { background: #FAFAF6; }
+
+        .cap-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            background: var(--bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: var(--fg);
+        }
+
+        .cap-card h3 { font-size: 20px; font-weight: 800; }
+        .cap-card p  { font-size: 14px; color: var(--muted); line-height: 1.65; }
+
+        .cap-tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 12px;
+            background: var(--bg);
+            border-radius: 100px;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--subtle);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-top: auto;
+        }
+
+        /* ── TECH HIGHLIGHT ── */
+        .tech-section {
+            background: var(--fg);
+            color: var(--dark-fg);
+            border-radius: 48px;
+            padding: 80px 80px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 64px;
+            align-items: center;
+        }
+
+        @media (max-width: 900px) { .tech-section { grid-template-columns: 1fr; padding: 56px 40px; border-radius: 32px; } }
+
+        .tech-section .section-label { color: #6B6B5E; }
+        .tech-section .section-label::before { background: #6B6B5E; }
+
+        .tech-section h2 {
+            font-size: clamp(28px, 3.5vw, 44px);
+            font-weight: 900;
+            letter-spacing: -0.04em;
+            line-height: 1.1;
+            margin-bottom: 20px;
+        }
+
+        .tech-section p {
+            font-size: 16px;
+            color: #A0A094;
+            line-height: 1.75;
+            margin-bottom: 32px;
+        }
+
+        .tech-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 28px;
+        }
+
+        .stat {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .stat-val {
+            font-size: 40px;
+            font-weight: 900;
+            letter-spacing: -0.04em;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: #6B6B5E;
+            font-weight: 500;
+        }
+
+        .tech-pills {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .tech-pill {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 18px 24px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+        }
+
+        .tech-pill .material-symbols-rounded { font-size: 24px; color: #D4D4C4; }
+        .tech-pill strong { font-size: 15px; font-weight: 700; display: block; margin-bottom: 2px; }
+        .tech-pill span { font-size: 13px; color: #6B6B5E; }
+
+        /* ── USE CASES ── */
+        .usecases-intro {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 56px;
+        }
+
+        .usecases-intro h2 {
+            font-size: clamp(30px, 3.5vw, 48px);
+            font-weight: 900;
+            letter-spacing: -0.04em;
+            max-width: 480px;
+            line-height: 1.1;
+        }
+
+        .usecases-intro p {
+            max-width: 360px;
+            font-size: 16px;
+            color: var(--muted);
+            line-height: 1.65;
+            text-align: right;
+        }
+
+        @media (max-width: 768px) {
+            .usecases-intro { flex-direction: column; align-items: flex-start; gap: 24px; }
+            .usecases-intro p { text-align: left; }
+        }
+
+        .use-cases-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        @media (max-width: 768px) { .use-cases-grid { grid-template-columns: 1fr; } }
+
+        .use-case-card {
+            padding: 36px 32px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+        }
+
+        .use-case-card:hover {
+            border-color: var(--fg);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+        }
+
+        .use-case-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            background: var(--bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+        }
+
+        .use-case-card h3 { font-size: 20px; font-weight: 800; }
+        .use-case-card p  { font-size: 14px; color: var(--muted); line-height: 1.65; flex: 1; }
+
+        .use-case-link {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--fg);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            opacity: 0.5;
+            transition: opacity 0.2s;
+        }
+
+        .use-case-card:hover .use-case-link { opacity: 1; }
+
+        /* ── CTA ── */
+        .cta-section {
+            padding: 96px 0 120px;
+            text-align: center;
+        }
+
+        .cta-section h2 {
+            font-size: clamp(36px, 5vw, 68px);
+            font-weight: 900;
+            letter-spacing: -0.04em;
+            line-height: 1.05;
+            margin-bottom: 20px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-section p {
+            font-size: 18px;
+            color: var(--muted);
+            margin-bottom: 44px;
+        }
+
+        /* ── FOOTER ── */
+        .footer {
+            padding: 32px 0;
+            border-top: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .footer-logo { font-size: 16px; font-weight: 900; text-transform: uppercase; letter-spacing: -0.03em; }
+        .footer-copy { font-size: 13px; color: var(--subtle); }
+
+        /* ── REVEAL ANIMATIONS ── */
+        .reveal-up {
+            opacity: 0;
+            transform: translateY(36px);
+            transition: opacity 0.85s cubic-bezier(0.22, 1, 0.36, 1), transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .reveal-visible {
+            opacity: 1;
+            transform: none;
+        }
+    </style>
 </head>
 <body>
-    
-    <div class="ambient-glow"></div>
 
-    
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-brand">
-                <span>Vision</span>
-            </div>
+    <!-- Nav -->
+    <div class="wrap">
+        <nav class="nav">
+            <div class="nav-logo">VISION</div>
             <div class="nav-links">
-                <a href="#tool" class="nav-link">Tool</a>
-                <a href="#about" class="nav-link">About AI</a>
-                <a href="#usecases" class="nav-link">Use Cases</a>
+                <a href="#how-it-works">How it works</a>
+                <a href="#capabilities">Capabilities</a>
+                <a href="#technology">Technology</a>
+                <a href="#use-cases">Use Cases</a>
             </div>
-            <div class="nav-auth" style="position: relative;">
-                <button class="nav-btn-login" id="navLoginBtn">Sign In</button>
-                
-                
-                <div id="profileDropdown" class="profile-dropdown hidden">
-                    <div class="profile-header">
-                        <span class="material-symbols-rounded" style="font-size: 40px; color: var(--gradient-1);">account_circle</span>
-                        <div class="profile-info">
-                            <span id="profileName" class="profile-name">User</span>
-                            <span id="profileEmail" class="profile-email">user@example.com</span>
-                        </div>
-                    </div>
-                    <div class="profile-actions">
-                        <button id="profileLogoutBtn" class="profile-logout-btn">
-                            <span class="material-symbols-rounded">logout</span>
-                            Logout
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </nav>
-
-    
-    <section id="tool" style="padding-top: 100px; width: 100%; display: flex; justify-content: center; padding-left: 20px; padding-right: 20px;">
-        <main class="container bento-container">
-            
-            
-            <header class="bento-box hero-box">
-                <div class="hero-content">
-                    <h1 id="heroTitle">Generate Code from <span>Sketches</span></h1>
-                    <p id="heroDesc">Upload a photo of your hand-drawn wireframe and let the neural network convert it into a fully functional HTML/CSS website.</p>
-                </div>
-            </header>
-
-            
-            <div class="bento-box nav-box">
-                <div class="tabs">
-                    <button class="tab-btn active" id="taskCodeBtn">
-                        <span class="material-symbols-rounded">draw</span> Sketch to Code
-                    </button>
-                    <button class="tab-btn" id="taskOcrBtn">
-                        <span class="material-symbols-rounded">notes</span> Handwriting OCR
-                    </button>
-                    <button class="tab-btn" id="taskExcelBtn">
-                        <span class="material-symbols-rounded">table</span> Data to Excel
-                    </button>
-                </div>
-            </div>
-
-            <div class="bento-main-grid">
-                
-                
-                <div class="bento-box upload-box" id="uploadArea" role="button" tabindex="0" aria-label="Upload image or document">
-                    <input type="file" id="fileInput" accept="image/*,application/pdf,.doc,.docx" capture="environment" multiple hidden aria-hidden="true">
-                    
-                    <div class="upload-content" id="uploadContent">
-                        <div class="upload-icon">
-                            <span class="material-symbols-rounded">add_photo_alternate</span>
-                        </div>
-                        <h3>Drop your files here</h3>
-                        <p>Images, PDFs, or Word documents</p>
-                    </div>
-
-                    <div class="preview-container hidden" id="previewContainer">
-                        <div class="image-gallery" id="imageGallery"></div>
-                        <div class="preview-actions">
-                            <button class="action-btn" id="addMoreBtn" title="Add more files" aria-label="Add more files" style="background: rgba(0,0,0,0.8); color: white;">
-                                <span class="material-symbols-rounded">add</span>
-                            </button>
-                            <button class="action-btn cancel-btn" id="clearBtn" title="Remove all files" aria-label="Remove all files" style="background: rgba(255,50,50,0.8);">
-                                <span class="material-symbols-rounded">close</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                
-                <div class="bento-side-grid">
-                    
-                    
-                    <div class="bento-box input-box">
-                        <textarea id="rawTextInput" placeholder="Or paste raw text/instructions here..." rows="4"></textarea>
-                    </div>
-
-                    
-                    <div class="bento-box settings-box" id="generationSettings">
-                        <div class="settings-header">
-                            <span class="material-symbols-rounded">tune</span>
-                            <label for="generationMode">Mode</label>
-                        </div>
-                        <select id="generationMode">
-                            <option value="simple">Simple (Strict)</option>
-                            <option value="creative">Creative (AI expands)</option>
-                        </select>
-                    </div>
-
-                    
-                    <div class="bento-box action-box">
-                        <button class="glow-btn" id="extractBtn" disabled>
-                            <span class="material-symbols-rounded" id="btnIcon">magic_button</span>
-                            <span id="btnText">Generate</span>
-                        </button>
-                    </div>
-
-                </div>
-            </div>
-
-            
-            <div class="bento-box result-box hidden" id="resultBox">
-                
-                
-                <div class="loading-section hidden" id="loadingState">
-                    <div class="loader-ring"></div>
-                    <h4 id="loadingStatus">Scanning...</h4>
-                    <div class="progress-bar-wrap">
-                        <div class="progress-bar-fill" id="processingProgress" style="width: 0%"></div>
-                    </div>
-                </div>
-
-                
-                <div class="result-section hidden" id="finalState">
-                    <div class="result-header">
-                        <div class="tabs result-tabs">
-                            <button class="tab-btn active" id="tabPreview">Preview</button>
-                            <button class="tab-btn" id="tabCode">Code</button>
-                        </div>
-                        <div class="result-actions" style="display: flex; gap: 8px;">
-                            <button class="action-btn download-excel-btn" id="downloadExcelBtn" style="display: none; background: var(--primary-color); color: white;" title="Download Excel">
-                                <span class="material-symbols-rounded">download</span> Download
-                            </button>
-                            <button class="icon-btn" id="openNewTabBtn" title="Open Full Screen">
-                                <span class="material-symbols-rounded">open_in_new</span>
-                            </button>
-                            <button class="icon-btn" id="copyBtn" title="Copy Content">
-                                <span class="material-symbols-rounded">content_copy</span>
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="result-body">
-                        
-                        <div class="preview-wrapper" id="previewPane">
-                            <iframe id="livePreviewFrame" sandbox="allow-scripts allow-modals"></iframe>
-                        </div>
-                        
-                        
-                        <div class="textarea-wrapper hidden" id="codePane">
-                            <textarea id="extractedText" readonly></textarea>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-        </main>
-    </section>
-
-    
-    <section id="about" class="info-section">
-        <div class="container bento-container">
-            <div class="bento-box info-box">
-                <div class="info-icon"><span class="material-symbols-rounded">auto_awesome</span></div>
-                <h2>Powered by Multimodal Vision AI</h2>
-                <p>Neural Vision isn't just a simple OCR tool. It utilizes state-of-the-art multimodal AI models (like Gemini) that process pixels and text simultaneously. This allows the AI to not just read words, but to deeply understand the context, layout, and intent behind your images.</p>
-                
-                <div class="info-grid">
-                    <div class="info-card">
-                        <span class="material-symbols-rounded">visibility</span>
-                        <h3>Spatial Awareness</h3>
-                        <p>Understands UI layouts, wireframes, and tables exactly as drawn.</p>
-                    </div>
-                    <div class="info-card">
-                        <span class="material-symbols-rounded">translate</span>
-                        <h3>Deep Context</h3>
-                        <p>Recognizes messy handwriting and converts it cleanly with grammatical context.</p>
-                    </div>
-                    <div class="info-card">
-                        <span class="material-symbols-rounded">data_object</span>
-                        <h3>Structured Output</h3>
-                        <p>Extracts raw visual data directly into JSON or usable Code.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    
-    <section id="usecases" class="info-section">
-        <div class="container bento-container">
-            <div class="bento-box info-box">
-                <div class="info-icon" style="color: var(--gradient-2);"><span class="material-symbols-rounded">workspaces</span></div>
-                <h2>Who is this for?</h2>
-                <p>Explore how professionals across different industries accelerate their workflows.</p>
-                
-                <div class="info-grid">
-                    <div class="info-card">
-                        <span class="material-symbols-rounded">code</span>
-                        <h3>Developers</h3>
-                        <p>Rapidly prototype ideas. Draw a UI on a napkin and get working Tailwind/CSS code in seconds.</p>
-                    </div>
-                    <div class="info-card">
-                        <span class="material-symbols-rounded">school</span>
-                        <h3>Students</h3>
-                        <p>Digitize lecture notes and whiteboard scribbles into searchable text instantly.</p>
-                    </div>
-                    <div class="info-card">
-                        <span class="material-symbols-rounded">query_stats</span>
-                        <h3>Data Analysts</h3>
-                        <p>Upload printed receipts, invoices, or tables and download organized Excel files.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2026 Neural Vision AI. All rights reserved.</p>
-        </div>
-    </footer>
-
-    
-    <div id="authModal" class="auth-modal hidden">
-        <div class="auth-modal-content bento-box">
-            <button class="icon-btn close-auth" id="closeAuthBtn"><span class="material-symbols-rounded">close</span></button>
-            <div class="auth-header">
-                <h2>Welcome Back</h2>
-                <p>Sign in to access premium features.</p>
-            </div>
-            
-            <button class="google-login-btn" id="googleLoginBtn">
-                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" alt="Google" width="20" height="20">
-                Continue with Google
-            </button>
-            
-            <div class="auth-divider">
-                <span>or continue with email</span>
-            </div>
-            
-            <form class="auth-form" id="authForm">
-                <div class="input-group">
-                    <label>Email</label>
-                    <input type="email" id="authEmail" placeholder="name@example.com" required>
-                </div>
-                <div class="input-group">
-                    <label>Password</label>
-                    <input type="password" id="authPassword" placeholder="••••••••" required>
-                </div>
-                <button type="submit" class="glow-btn" style="min-height: 48px; margin-top: 10px;" id="authSubmitBtn">Sign In</button>
-            </form>
-            
-            <p class="auth-switch">
-                <span id="authSwitchText">Don't have an account?</span> 
-                <a href="#" id="authSwitchLink">Sign up</a>
-            </p>
-        </div>
+            <a href="app.html" class="nav-btn">
+                Launch Studio
+                <span class="material-symbols-rounded" style="font-size:18px;">arrow_outward</span>
+            </a>
+        </nav>
     </div>
 
+    <!-- Hero -->
+    <div class="wrap">
+        <section class="hero-section">
+            <div class="hero reveal-up">
+                <div class="hero-kicker">Multimodal AI Platform · V2.0</div>
+                <h1>Turn any sketch into <em>working code</em>.</h1>
+                <p class="hero-sub">
+                    Upload a sketch. Get working code in seconds. No design tools, no manual translation — just draw, upload, and generate.
+                </p>
+                <div class="hero-actions">
+                    <a href="app.html" class="btn-primary">
+                        Open Studio
+                        <span class="material-symbols-rounded" style="font-size:20px;">arrow_forward</span>
+                    </a>
+                    <a href="#how-it-works" class="btn-secondary">See how it works</a>
+                </div>
+            </div>
+
+            <!-- Hero Visual: Animated Split Screen -->
+            <div class="hero-visual reveal-up" style="transition-delay:150ms;">
+                <!-- Left: Sketch Panel -->
+                <div class="hv-panel hv-left">
+                    <div class="hv-header">
+                        <div class="hv-dot" style="background:#FF5F57"></div>
+                        <div class="hv-dot" style="background:#FEBC2E"></div>
+                        <div class="hv-dot" style="background:#28C840"></div>
+                        <span class="hv-title">sketch.png</span>
+                    </div>
+                    <div class="hv-sketch-area">
+                        <!-- Simulated hand-drawn wireframe using SVG -->
+                        <svg viewBox="0 0 340 260" xmlns="http://www.w3.org/2000/svg" class="sketch-svg">
+                            <!-- Nav bar rough rect -->
+                            <rect x="12" y="12" width="316" height="32" rx="3" fill="none" stroke="#2A2A2A" stroke-width="2" stroke-dasharray="4 2"/>
+                            <line x1="24" y1="28" x2="80" y2="28" stroke="#2A2A2A" stroke-width="2.5" stroke-linecap="round"/>
+                            <line x1="220" y1="28" x2="248" y2="28" stroke="#2A2A2A" stroke-width="1.5" stroke-linecap="round"/>
+                            <line x1="255" y1="28" x2="285" y2="28" stroke="#2A2A2A" stroke-width="1.5" stroke-linecap="round"/>
+                            <rect x="292" y="20" width="30" height="16" rx="8" fill="none" stroke="#2A2A2A" stroke-width="1.5"/>
+                            <!-- Hero area rough -->
+                            <rect x="12" y="54" width="200" height="90" rx="4" fill="none" stroke="#2A2A2A" stroke-width="2" stroke-dasharray="5 2"/>
+                            <line x1="28" y1="72" x2="160" y2="72" stroke="#2A2A2A" stroke-width="3" stroke-linecap="round"/>
+                            <line x1="28" y1="84" x2="140" y2="84" stroke="#2A2A2A" stroke-width="2" stroke-linecap="round"/>
+                            <line x1="28" y1="94" x2="120" y2="94" stroke="#2A2A2A" stroke-width="2" stroke-linecap="round"/>
+                            <rect x="28" y="110" width="60" height="22" rx="11" fill="none" stroke="#2A2A2A" stroke-width="1.5"/>
+                            <!-- Side card -->
+                            <rect x="224" y="54" width="104" height="90" rx="4" fill="none" stroke="#2A2A2A" stroke-width="2" stroke-dasharray="5 2"/>
+                            <circle cx="276" cy="85" r="22" fill="none" stroke="#2A2A2A" stroke-width="1.5"/>
+                            <line x1="240" y1="118" x2="312" y2="118" stroke="#2A2A2A" stroke-width="1.5" stroke-linecap="round"/>
+                            <line x1="248" y1="128" x2="304" y2="128" stroke="#2A2A2A" stroke-width="1.5" stroke-linecap="round"/>
+                            <!-- Cards row -->
+                            <rect x="12" y="158" width="96" height="60" rx="4" fill="none" stroke="#2A2A2A" stroke-width="2" stroke-dasharray="4 2"/>
+                            <rect x="122" y="158" width="96" height="60" rx="4" fill="none" stroke="#2A2A2A" stroke-width="2" stroke-dasharray="4 2"/>
+                            <rect x="232" y="158" width="96" height="60" rx="4" fill="none" stroke="#2A2A2A" stroke-width="2" stroke-dasharray="4 2"/>
+                            <!-- Annotation arrows -->
+                            <text x="14" y="236" font-size="10" fill="#888" font-family="monospace">navbar</text>
+                            <text x="14" y="248" font-size="10" fill="#888" font-family="monospace">hero + cta btn</text>
+                            <text x="180" y="248" font-size="10" fill="#888" font-family="monospace">3-col cards</text>
+                        </svg>
+                    </div>
+                    <div class="hv-footer-bar">
+                        <span class="hv-chip">sketch.png · 248 KB</span>
+                    </div>
+                </div>
+
+                <!-- Arrow indicator -->
+                <div class="hv-arrow">
+                    <div class="hv-arrow-line"></div>
+                    <span class="material-symbols-rounded hv-arrow-icon">arrow_forward</span>
+                </div>
+
+                <!-- Right: Code Panel -->
+                <div class="hv-panel hv-right">
+                    <div class="hv-header">
+                        <div class="hv-dot" style="background:#FF5F57"></div>
+                        <div class="hv-dot" style="background:#FEBC2E"></div>
+                        <div class="hv-dot" style="background:#28C840"></div>
+                        <span class="hv-title">output.html</span>
+                        <span class="hv-chip hv-chip-green" style="margin-left:auto;">Generated ✓</span>
+                    </div>
+                    <div class="hv-code-area">
+<pre class="hv-code"><span class="c-tag">&lt;nav</span> <span class="c-attr">class</span>=<span class="c-str">"navbar"</span><span class="c-tag">&gt;</span>
+  <span class="c-tag">&lt;div</span> <span class="c-attr">class</span>=<span class="c-str">"logo"</span><span class="c-tag">&gt;</span>VISION<span class="c-tag">&lt;/div&gt;</span>
+  <span class="c-tag">&lt;div</span> <span class="c-attr">class</span>=<span class="c-str">"nav-links"</span><span class="c-tag">&gt;</span>...<span class="c-tag">&lt;/div&gt;</span>
+  <span class="c-tag">&lt;button</span> <span class="c-attr">class</span>=<span class="c-str">"cta-btn"</span><span class="c-tag">&gt;</span>Launch<span class="c-tag">&lt;/button&gt;</span>
+<span class="c-tag">&lt;/nav&gt;</span>
+
+<span class="c-tag">&lt;section</span> <span class="c-attr">class</span>=<span class="c-str">"hero"</span><span class="c-tag">&gt;</span>
+  <span class="c-tag">&lt;h1&gt;</span>Turn sketches into<span class="c-tag">&lt;/h1&gt;</span>
+  <span class="c-tag">&lt;p</span> <span class="c-attr">class</span>=<span class="c-str">"subtitle"</span><span class="c-tag">&gt;</span>
+    working code instantly
+  <span class="c-tag">&lt;/p&gt;</span>
+  <span class="c-tag">&lt;button</span> <span class="c-attr">class</span>=<span class="c-str">"btn-primary"</span><span class="c-tag">&gt;</span>
+    Open Studio
+  <span class="c-tag">&lt;/button&gt;</span>
+<span class="c-tag">&lt;/section&gt;</span>
+
+<span class="c-tag">&lt;div</span> <span class="c-attr">class</span>=<span class="c-str">"cards-grid"</span><span class="c-tag">&gt;</span>
+  <span class="c-tag">&lt;div</span> <span class="c-attr">class</span>=<span class="c-str">"card"</span><span class="c-tag">&gt;</span>...<span class="c-tag">&lt;/div&gt;</span>
+  <span class="c-tag">&lt;div</span> <span class="c-attr">class</span>=<span class="c-str">"card"</span><span class="c-tag">&gt;</span>...<span class="c-tag">&lt;/div&gt;</span>
+  <span class="c-tag">&lt;div</span> <span class="c-attr">class</span>=<span class="c-str">"card"</span><span class="c-tag">&gt;</span>...<span class="c-tag">&lt;/div&gt;</span>
+<span class="c-tag">&lt;/div&gt;</span></pre>
+                    </div>
+                    <div class="hv-footer-bar">
+                        <span class="hv-chip hv-chip-green">Preview ready</span>
+                        <span class="hv-chip" style="margin-left:8px;">Copy code</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="wrap"><hr class="divider"></div>
+
+    <!-- How it Works -->
+    <div class="wrap" id="how-it-works">
+        <section>
+            <div class="how-grid">
+                <div class="how-left reveal-up">
+                    <div class="section-label">How it works</div>
+                    <h2>Draw it.<br>We'll code it.</h2>
+                    <p>
+                        Take any surface — napkin, whiteboard, notebook — snap a photo, drop it here. VISION figures out the rest without you writing a single line of code.
+                    </p>
+                    <a href="app.html" class="btn-primary" style="font-size:14px; padding:12px 28px;">
+                        Try it now <span class="material-symbols-rounded" style="font-size:16px;">arrow_forward</span>
+                    </a>
+                </div>
+
+                <div class="steps">
+                    <div class="step reveal-up" style="transition-delay:80ms;">
+                        <div class="step-num">1</div>
+                        <div class="step-body">
+                            <h4>Drop something in</h4>
+                            <p>A photo of your sketch, a scanned PDF, a Word doc. Messy or clean — the AI handles both just fine.</p>
+                        </div>
+                    </div>
+                    <div class="step reveal-up" style="transition-delay:160ms;">
+                        <div class="step-num">2</div>
+                        <div class="step-body">
+                            <h4>Tell it what you need</h4>
+                            <p>Pick a mode — code, OCR, or Excel — then add a short note if needed. "Use Tailwind", "keep the table", "output JSON". Done.</p>
+                        </div>
+                    </div>
+                    <div class="step reveal-up" style="transition-delay:240ms;">
+                        <div class="step-num">3</div>
+                        <div class="step-body">
+                            <h4>Done in seconds</h4>
+                            <p>Preview the result, copy the code, or download the file. Ready to paste into your project, share with a client, or open in Excel.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="wrap"><hr class="divider"></div>
+
+    <!-- Capabilities -->
+    <div class="wrap" id="capabilities">
+        <section>
+            <div class="section-label reveal-up">What it can do</div>
+            <h2 class="reveal-up" style="font-size:clamp(30px,3.5vw,48px); font-weight:900; letter-spacing:-0.04em; margin-bottom:48px; line-height:1.1;">One tool, three superpowers.</h2>
+
+            <div class="caps-grid">
+                <div class="cap-card reveal-up">
+                    <div class="cap-icon"><span class="material-symbols-rounded">draw</span></div>
+                    <h3>Sketch to Code</h3>
+                    <p>
+                        Draw any UI layout on paper — navigation bars, buttons, cards, forms — and VISION will parse the spatial structure and generate clean HTML and CSS that closely matches your drawing. Works with rough sketches, napkin wireframes, and whiteboard photos.
+                    </p>
+                    <span class="cap-tag">HTML · CSS · Tailwind</span>
+                </div>
+                <div class="cap-card reveal-up" style="transition-delay:80ms;">
+                    <div class="cap-icon"><span class="material-symbols-rounded">notes</span></div>
+                    <h3>Handwriting OCR</h3>
+                    <p>
+                        Context-aware text recognition that goes beyond letter-by-letter scanning. VISION understands the grammatical context of words, correctly interprets ambiguous characters, and even handles multiple languages and mixed scripts.
+                    </p>
+                    <span class="cap-tag">Multilingual · Context-aware</span>
+                </div>
+                <div class="cap-card reveal-up" style="transition-delay:160ms;">
+                    <div class="cap-icon"><span class="material-symbols-rounded">table</span></div>
+                    <h3>Data to Excel</h3>
+                    <p>
+                        Upload photos of printed receipts, invoices, financial tables, or any structured document. VISION extracts rows, columns, and values and exports them as a properly formatted `.xlsx` file you can open directly in Excel or Google Sheets.
+                    </p>
+                    <span class="cap-tag">XLSX · JSON · Structured</span>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Technology Section (Dark) -->
+    <div class="wrap" id="technology">
+        <section style="padding-top:0;">
+            <div class="tech-section reveal-up">
+                <div>
+                    <div class="section-label">Under the Hood</div>
+                    <h2>Not just OCR. It actually thinks.</h2>
+                    <p>
+                        Traditional OCR reads pixel by pixel. Gemini understands what's on the page — the layout, the meaning, the intent. That's the difference between a tool and intelligence.
+                    </p>
+                    <div class="tech-stats">
+                        <div class="stat">
+                            <span class="stat-val">3</span>
+                            <span class="stat-label">AI modes included</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-val">~5s</span>
+                            <span class="stat-label">Average generation time</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-val">10+</span>
+                            <span class="stat-label">File types supported</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-val">100%</span>
+                            <span class="stat-label">Client-side secure</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tech-pills">
+                    <div class="tech-pill">
+                        <span class="material-symbols-rounded">visibility</span>
+                        <div>
+                            <strong>Spatial Understanding</strong>
+                            <span>Understands layout, alignment, and component hierarchy in wireframes</span>
+                        </div>
+                    </div>
+                    <div class="tech-pill">
+                        <span class="material-symbols-rounded">translate</span>
+                        <div>
+                            <strong>Language + Grammar Aware</strong>
+                            <span>Corrects spelling errors and recognizes handwriting in context</span>
+                        </div>
+                    </div>
+                    <div class="tech-pill">
+                        <span class="material-symbols-rounded">data_object</span>
+                        <div>
+                            <strong>Structured Extraction</strong>
+                            <span>Outputs clean JSON, valid HTML, or formatted spreadsheet data</span>
+                        </div>
+                    </div>
+                    <div class="tech-pill">
+                        <span class="material-symbols-rounded">lock</span>
+                        <div>
+                            <strong>Secure by Default</strong>
+                            <span>Your API key stays local. No data is stored on our servers.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Use Cases -->
+    <div class="wrap" id="use-cases">
+        <section>
+            <div class="usecases-intro">
+                <h2 class="reveal-up">Built for real work.</h2>
+                <p class="reveal-up" style="transition-delay:80ms;">From dev studios to classrooms to accounting offices — VISION fits in.</p>
+            </div>
+
+            <div class="use-cases-grid">
+                <div class="use-case-card reveal-up">
+                    <div class="use-case-icon"><span class="material-symbols-rounded">code</span></div>
+                    <h3>Developers</h3>
+                    <p>Stop wasting time translating UI mockups to code manually. Draw a layout on paper, photograph it, and get working HTML/CSS in under 10 seconds. Ideal for rapid prototyping and client demos.</p>
+                    <span class="use-case-link">Try Sketch to Code <span class="material-symbols-rounded" style="font-size:16px;">arrow_forward</span></span>
+                </div>
+                <div class="use-case-card reveal-up" style="transition-delay:80ms;">
+                    <div class="use-case-icon"><span class="material-symbols-rounded">school</span></div>
+                    <h3>Students & Researchers</h3>
+                    <p>Digitize lecture notes, handwritten equations, and whiteboard diagrams instantly. Search your notes, copy text, and never miss a detail from a fast-moving lecture again.</p>
+                    <span class="use-case-link">Try Handwriting OCR <span class="material-symbols-rounded" style="font-size:16px;">arrow_forward</span></span>
+                </div>
+                <div class="use-case-card reveal-up" style="transition-delay:160ms;">
+                    <div class="use-case-icon"><span class="material-symbols-rounded">query_stats</span></div>
+                    <h3>Data Analysts</h3>
+                    <p>Turn stacks of paper invoices, receipts, and printed tables into clean Excel files in minutes. No more manual data entry. VISION preserves column structure and handles merged cells.</p>
+                    <span class="use-case-link">Try Data to Excel <span class="material-symbols-rounded" style="font-size:16px;">arrow_forward</span></span>
+                </div>
+                <div class="use-case-card reveal-up" style="transition-delay:240ms;">
+                    <div class="use-case-icon"><span class="material-symbols-rounded">design_services</span></div>
+                    <h3>UI/UX Designers</h3>
+                    <p>Convert low-fidelity paper wireframes to clickable HTML prototypes without touching Figma or any design tool. Share with clients for instant feedback on real-looking layouts.</p>
+                    <span class="use-case-link">Try Sketch to Code <span class="material-symbols-rounded" style="font-size:16px;">arrow_forward</span></span>
+                </div>
+                <div class="use-case-card reveal-up" style="transition-delay:320ms;">
+                    <div class="use-case-icon"><span class="material-symbols-rounded">business_center</span></div>
+                    <h3>Business Teams</h3>
+                    <p>Extract line items, totals, and vendor info from stacks of physical invoices. Export to Excel and connect to your accounting workflows. Reduce hours of manual data entry to minutes.</p>
+                    <span class="use-case-link">Try Data to Excel <span class="material-symbols-rounded" style="font-size:16px;">arrow_forward</span></span>
+                </div>
+                <div class="use-case-card reveal-up" style="transition-delay:400ms;">
+                    <div class="use-case-icon"><span class="material-symbols-rounded">auto_stories</span></div>
+                    <h3>Writers & Journalists</h3>
+                    <p>Have years of handwritten notebooks or physical archives? VISION digitizes and cleans them up with grammatical context, so you get readable, searchable documents — not garbled text.</p>
+                    <span class="use-case-link">Try Handwriting OCR <span class="material-symbols-rounded" style="font-size:16px;">arrow_forward</span></span>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- CTA -->
+    <div class="wrap">
+        <section class="cta-section reveal-up">
+            <h2>Still reading?<br>Just try it.</h2>
+            <p>Open the studio — no sign-up, no setup, no credit card.</p>
+            <a href="app.html" class="btn-primary" style="font-size:18px; padding:18px 48px; margin:0 auto; display:inline-flex;">
+                Open VISION Studio
+                <span class="material-symbols-rounded" style="font-size:22px;">arrow_forward</span>
+            </a>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <div class="wrap">
+        <footer class="footer">
+            <div class="footer-logo">VISION</div>
+            <div class="footer-copy">© 2026 VISION AI Studio. Built with Gemini.</div>
+        </footer>
+    </div>
+
+    <script>
+        // Smooth scroll with easing for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const target = document.querySelector(this.getAttribute('href'));
+                if (!target) return;
+                e.preventDefault();
+                const targetY = target.getBoundingClientRect().top + window.scrollY - 80;
+                smoothScrollTo(targetY, 700);
+            });
+        });
+
+        function smoothScrollTo(targetY, duration) {
+            const startY = window.scrollY;
+            const diff = targetY - startY;
+            let start = null;
+            function step(timestamp) {
+                if (!start) start = timestamp;
+                const elapsed = timestamp - start;
+                const progress = Math.min(elapsed / duration, 1);
+                const ease = progress < 0.5
+                    ? 4 * progress * progress * progress
+                    : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+                window.scrollTo(0, startY + diff * ease);
+                if (elapsed < duration) requestAnimationFrame(step);
+            }
+            requestAnimationFrame(step);
+        }
+
+        // Reveal on scroll — fires for elements already in viewport too
+        const revealObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('reveal-visible');
+                    observer.unobserve(entry.target); // animate once
+                }
+            });
+        }, {
+            threshold: 0.08,
+            rootMargin: '0px 0px -40px 0px'
+        });
+
+        document.querySelectorAll('.reveal-up').forEach(el => revealObserver.observe(el));
+
+        // Trigger hero elements that are already visible on page load
+        window.addEventListener('load', () => {
+            document.querySelectorAll('.reveal-up').forEach(el => {
+                const rect = el.getBoundingClientRect();
+                if (rect.top < window.innerHeight * 0.95) {
+                    el.classList.add('reveal-visible');
+                }
+            });
+        });
+    </script>
 </body>
 </html>

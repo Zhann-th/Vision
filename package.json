@@ -4,7 +4,8 @@
   "description": "Backend for AI Handwriting OCR",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "build:css": "tailwindcss -i ./styles.css -o ./output.css --watch"
   },
   "dependencies": {
     "@google/generative-ai": "^0.21.0",
@@ -14,5 +15,9 @@
     "mammoth": "^1.12.2",
     "multer": "^1.4.5-lts.1",
     "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.3.3",
+    "tailwindcss": "^4.3.3"
   }
 }
