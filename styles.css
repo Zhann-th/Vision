@@ -16,7 +16,7 @@
   --text-color: #1A1A1A;
 }
 
-/* Custom scrollbar for web app feel */
+
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -35,7 +35,7 @@
   background: #D0D0C8;
 }
 
-/* Base resets */
+
 * {
     margin: 0;
     padding: 0;
