@@ -1,5 +1,4 @@
 const { GoogleGenerativeAI } = require('@google/generative-ai');
-
 async function test() {
     const apiKey = "YOUR_API_KEY";
     console.log("Testing SDK...");
@@ -11,20 +10,18 @@ async function test() {
     } catch(e) {
         console.log("SDK Error:", e.message);
     }
-
     console.log("Testing raw fetch (?key)...");
     try {
-        let res1 = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+        let res1 = await fetch(`https:
             method: 'POST', headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({contents: [{parts: [{text: "Say hello"}]}]})
         });
         const d1 = await res1.json();
         console.log("Raw fetch (?key) Status:", res1.status, d1.error?.message || "Success");
     } catch (e) { console.log(e); }
-
     console.log("Testing raw fetch (Bearer)...");
     try {
-        const res2 = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent`, {
+        const res2 = await fetch(`https:
             method: 'POST', headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}`},
             body: JSON.stringify({contents: [{parts: [{text: "Say hello"}]}]})
         })

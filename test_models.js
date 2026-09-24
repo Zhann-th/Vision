@@ -9,11 +9,10 @@ async function findWorkingModel() {
         "gemini-3.7-flash",
         "gemini-3.5-flash"
     ];
-
     for (var model of modelsToTry) {
         console.log(`Trying ${model}...`);
         try {
-            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`, {
+            const res = await fetch(`https:
                 method: 'POST', 
                 headers: {
                     'Content-Type': 'application/json',

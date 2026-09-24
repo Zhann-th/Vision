@@ -2,7 +2,7 @@ async function test() {
     const apiKey = "YOUR_API_KEY";
     console.log("Listing models...")
     try {
-        var res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models`, {
+        var res = await fetch(`https:
             method: 'GET', 
             headers: {'x-goog-api-key': apiKey}
         });

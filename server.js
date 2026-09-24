@@ -35,7 +35,6 @@ app.post('/api/extract', upload.array('images', 10), async (req, res) => {
             - Numbers should be numbers (not strings). Dates should be ISO strings.
             - If multiple separate tables exist, flatten them with a "__table" key.
             - NO markdown, NO backticks, NO explanations. Raw JSON only.`
-
         } else if (taskType === 'ocr') {
             prompt = `You are a context-aware text digitization expert, not just a character scanner.
             Your job: extract ALL handwritten or printed text from the image(s) with the following priorities:
@@ -43,38 +42,30 @@ app.post('/api/extract', upload.array('images', 10), async (req, res) => {
             2. Preserve paragraph structure, indentation, bullet points, and numbered lists.
             3. If a diagram or table is present alongside text, represent it in plain text (e.g., ASCII table or labeled items).
             4. Output ONLY the cleaned, readable text. No markdown wrappers, no commentary.`
-
         } else {
             prompt = `You are a world-class senior Frontend Engineer and UI designer being asked to convert a sketch into a real, beautiful website.
-
 STEP 1 — ANALYZE the sketch carefully:
 - What is the product/service/purpose of this website?
 - Who is the target audience? (young creatives, enterprises, developers, consumers?)
 - What is the visual mood? (energetic, calm, luxurious, playful, minimal?)
 - What industry is this? (tech, food, fashion, finance, health, education?)
-
 STEP 2 — DESIGN with intention:
 Based on your analysis, choose a design direction that FITS this specific product. Do not apply the same template to everything.
 - Pick a color palette that suits the brand (not just "dark with purple gradients" every time).
 - Use typography that matches the mood — large editorial fonts for luxury, rounded sans-serif for friendly tech, mono for developer tools, etc.
 - Choose a layout style appropriate for the content — editorial grid, single-scroll narrative, cards, split-screen, etc.
-
 STEP 3 — BUILD it:
-
 HARD RULES:
 1. Output a SINGLE complete HTML document. All CSS must be inside a <style> tag. All JS (if any) inside a <script> tag.
 2. Do NOT output markdown wrappers (\`\`\`html). Start directly with <!DOCTYPE html>.
-3. Use REAL placeholder photos from: https://loremflickr.com/800/600/{keyword} where {keyword} matches the theme of the image on screen. Use specific keywords (e.g., "espresso", "architecture", "hiking", "laptop-code"). NEVER use generic "placeholder".
+3. Use REAL placeholder photos from: https:
 4. Use Google Fonts — pick one that matches the brand personality.
 5. Add smooth CSS transitions on hover states (buttons, cards, links).
 6. The result must be visually polished: proper spacing, consistent font sizing, clear hierarchy.
 7. Interpret any handwritten labels, arrows, or notes as design instructions.\n`;
-
             if (mode === 'creative') {
                 prompt += `\nMODE: CREATIVE — TOTAL DESIGN FREEDOM
-
 Treat the sketch as a rough idea, not a blueprint. Your job is to design a PREMIUM, MEMORABLE website that someone would be genuinely impressed by.
-
 CREATIVE DIRECTIVES:
 - Break the grid occasionally. Not everything needs to be aligned — use large asymmetric hero text, overlapping elements, or full-bleed sections.
 - Choose ONE strong visual identity and commit to it fully (e.g., "brutalist editorial with uppercase headlines and thick borders", or "clean luxury with lots of whitespace and gold accents", or "vibrant gen-z with big bold gradients and unusual font pairings").
@@ -84,10 +75,8 @@ CREATIVE DIRECTIVES:
 - Add these premium sections if they make sense: sticky nav with blur backdrop, hero with layered text + image, features grid, testimonial, CTA banner, footer with links.
 - Use CSS custom properties (--color-primary, --font-heading, etc.) for the design system.
 - The final result should look like it costs $50,000 to build.`;
-
             } else {
                 prompt += `\nMODE: STRICT — FAITHFUL RECONSTRUCTION
-
 Follow the sketch closely. Your job is to build exactly what was drawn, cleanly and professionally.
 - Match the layout structure of the sketch as precisely as possible.
 - Do not add sections, UI elements, or content that wasn't in the sketch.
@@ -137,7 +126,7 @@ Follow the sketch closely. Your job is to build exactly what was drawn, cleanly 
                 ]
             }]
         }
-        let response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent`, {
+        let response = await fetch(`https:
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -180,6 +169,6 @@ Follow the sketch closely. Your job is to build exactly what was drawn, cleanly 
     }
 });
 app.listen(port, () => {
-    console.log(`Server is running at http://localhost:${port}`);
+    console.log(`Server is running at http:
     console.log('To stop the server, press Ctrl+C');
 });

@@ -2,7 +2,7 @@ async function test() {
     const apiKey = "YOUR_API_KEY";
     console.log("Testing server.js logic...");
     try {
-        var res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent`, {
+        var res = await fetch(`https:
             method: 'POST', 
             headers: {
                 'Content-Type': 'application/json',

@@ -9,7 +9,6 @@
     <script type="module" src="script.js"></script>
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
         :root {
             --outer-bg: #0F0F0E;
             --window-bg: #17171A;
@@ -27,7 +26,6 @@
             --accent-green-soft: rgba(92, 201, 132, 0.12);
             --radius: 24px;
         }
-
         html, body {
             height: 100%;
             width: 100%;
@@ -36,7 +34,6 @@
             color: var(--fg);
             overflow: hidden;
         }
-
         /* Outer shell with breathing room */
         .app-shell {
             display: flex;
@@ -44,7 +41,6 @@
             width: 100vw;
             padding: 16px;
         }
-
         /* The floating window */
         .app-window {
             flex: 1;
@@ -59,7 +55,6 @@
                 0 4px 16px rgba(0,0,0,0.4);
             overflow: hidden;
         }
-
         /* Header */
         .app-header {
             height: 56px;
@@ -73,13 +68,11 @@
             position: relative;
             z-index: 10;
         }
-
         .header-left {
             display: flex;
             align-items: center;
             gap: 20px;
         }
-
         .app-logo {
             font-size: 17px;
             font-weight: 900;
@@ -90,7 +83,6 @@
             align-items: center;
             gap: 10px;
         }
-
         .logo-dot {
             width: 8px;
             height: 8px;
@@ -98,7 +90,6 @@
             background: var(--accent);
             box-shadow: 0 0 8px var(--accent);
         }
-
         .back-link {
             font-size: 12px;
             color: var(--fg-muted);
@@ -108,9 +99,7 @@
             gap: 4px;
             transition: color 0.15s;
         }
-
         .back-link:hover { color: var(--fg); }
-
         .mode-tabs {
             display: flex;
             gap: 2px;
@@ -119,7 +108,6 @@
             border-radius: 10px;
             border: 1px solid var(--border);
         }
-
         .mode-tab {
             padding: 6px 14px;
             border-radius: 7px;
@@ -135,22 +123,18 @@
             transition: all 0.18s ease;
             font-family: 'Outfit', sans-serif;
         }
-
         .mode-tab.active {
             background: var(--accent-soft);
             color: var(--accent);
             border: 1px solid rgba(139,124,246,0.2);
         }
-
         .mode-tab .material-symbols-rounded { font-size: 15px; }
-
         .header-right {
             display: flex;
             align-items: center;
             gap: 10px;
             position: relative;
         }
-
         .sign-in-btn {
             padding: 7px 16px;
             background: rgba(255,255,255,0.06);
@@ -163,9 +147,7 @@
             cursor: pointer;
             transition: all 0.15s;
         }
-
         .sign-in-btn:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.15); }
-
         /* Profile dropdown */
         .profile-dropdown {
             position: absolute;
@@ -180,9 +162,7 @@
             display: none;
             z-index: 100;
         }
-
         .profile-dropdown.visible { display: block; }
-
         .profile-info {
             display: flex;
             align-items: center;
@@ -191,12 +171,9 @@
             border-bottom: 1px solid var(--border);
             margin-bottom: 12px;
         }
-
         .profile-info .material-symbols-rounded { font-size: 32px; color: var(--fg-muted); }
-
         .profile-name { font-weight: 700; font-size: 13px; display: block; color: var(--fg); }
         .profile-email { font-size: 11px; color: var(--fg-muted); display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
         .logout-btn {
             width: 100%;
             display: flex;
@@ -214,16 +191,13 @@
             cursor: pointer;
             transition: background 0.15s;
         }
-
         .logout-btn:hover { background: rgba(248,113,113,0.08); }
-
         /* Workspace layout */
         .workspace {
             flex: 1;
             display: flex;
             overflow: hidden;
         }
-
         /* Left Panel */
         .panel-left {
             width: 40%;
@@ -233,7 +207,6 @@
             background: var(--panel-left-bg);
             flex-shrink: 0;
         }
-
         .panel-label {
             padding: 14px 20px 8px;
             font-size: 10px;
@@ -242,7 +215,6 @@
             letter-spacing: 0.12em;
             color: var(--fg-dim);
         }
-
         /* Upload zone */
         .upload-zone {
             flex: 1;
@@ -259,12 +231,10 @@
             overflow: hidden;
             transition: border-color 0.2s, background 0.2s;
         }
-
         .upload-zone:hover {
             border-color: var(--accent);
             background: var(--accent-soft);
         }
-
         .upload-placeholder {
             display: flex;
             flex-direction: column;
@@ -274,9 +244,7 @@
             text-align: center;
             padding: 24px;
         }
-
         .upload-zone:hover .upload-placeholder { transform: translateY(-6px); }
-
         .upload-icon-circle {
             width: 64px;
             height: 64px;
@@ -290,10 +258,8 @@
             font-size: 28px;
             color: var(--accent);
         }
-
         .upload-placeholder h3 { font-size: 15px; font-weight: 700; margin-bottom: 4px; color: var(--fg); }
         .upload-placeholder p  { font-size: 12px; color: var(--fg-muted); }
-
         /* Preview container */
         .preview-container {
             position: absolute;
@@ -301,9 +267,7 @@
             background: var(--panel-left-bg);
             display: none;
         }
-
         .preview-container.visible { display: block; }
-
         .image-gallery {
             width: 100%;
             height: 100%;
@@ -314,7 +278,6 @@
             gap: 8px;
             align-content: start;
         }
-
         .preview-actions {
             position: absolute;
             bottom: 12px;
@@ -323,7 +286,6 @@
             display: flex;
             gap: 6px;
         }
-
         .preview-action-btn {
             width: 36px;
             height: 36px;
@@ -337,11 +299,9 @@
             transition: transform 0.2s, opacity 0.2s;
             box-shadow: 0 4px 16px rgba(0,0,0,0.4);
         }
-
         .preview-action-btn:hover { transform: scale(1.1); opacity: 0.9; }
         .preview-action-btn.add   { background: var(--accent); color: #fff; }
         .preview-action-btn.clear { background: #ef4444; color: #fff; }
-
         /* Instructions Panel */
         .instructions-panel {
             height: 156px;
@@ -352,16 +312,13 @@
             padding: 14px 20px;
             flex-shrink: 0;
         }
-
         .instructions-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 8px;
         }
-
         .instructions-header .panel-label { padding: 0; }
-
         .mode-select {
             display: flex;
             align-items: center;
@@ -369,7 +326,6 @@
             font-size: 12px;
             color: var(--fg-muted);
         }
-
         .mode-select select {
             font-family: 'Outfit', sans-serif;
             font-size: 12px;
@@ -381,9 +337,7 @@
             cursor: pointer;
             outline: none;
         }
-
         .mode-select select:focus { border-color: var(--accent); }
-
         textarea#rawTextInput {
             flex: 1;
             width: 100%;
@@ -396,9 +350,7 @@
             color: var(--fg);
             line-height: 1.65;
         }
-
         textarea#rawTextInput::placeholder { color: var(--fg-dim); }
-
         /* Right Panel */
         .panel-right {
             flex: 1;
@@ -407,7 +359,6 @@
             background: var(--panel-right-bg);
             overflow: hidden;
         }
-
         /* Output Toolbar */
         .output-toolbar {
             height: 56px;
@@ -419,12 +370,10 @@
             background: var(--window-bg);
             flex-shrink: 0;
         }
-
         .output-tabs {
             display: flex;
             gap: 2px;
         }
-
         .output-tab {
             padding: 6px 16px;
             border-radius: 7px;
@@ -435,17 +384,14 @@
             transition: all 0.18s;
             font-family: 'Outfit', sans-serif;
         }
-
         .output-tab.active { background: var(--accent-soft); color: var(--accent); }
         .output-tab:not(.active) { background: transparent; color: var(--fg-muted); }
         .output-tab:not(.active):hover { background: rgba(255,255,255,0.04); color: var(--fg); }
-
         .toolbar-actions {
             display: flex;
             align-items: center;
             gap: 6px;
         }
-
         .icon-action-btn {
             width: 32px;
             height: 32px;
@@ -460,9 +406,7 @@
             transition: background 0.15s, color 0.15s;
             font-size: 17px;
         }
-
         .icon-action-btn:hover { background: rgba(255,255,255,0.06); color: var(--fg); }
-
         .download-btn {
             display: none;
             align-items: center;
@@ -478,9 +422,7 @@
             cursor: pointer;
             transition: opacity 0.15s;
         }
-
         .download-btn:hover { opacity: 0.8; }
-
         .generate-btn {
             display: flex;
             align-items: center;
@@ -497,16 +439,13 @@
             transition: opacity 0.2s, transform 0.2s, box-shadow 0.2s;
             box-shadow: 0 4px 16px rgba(139,124,246,0.3);
         }
-
         .generate-btn:hover:not(:disabled) {
             opacity: 0.9;
             transform: translateY(-1px);
             box-shadow: 0 8px 24px rgba(139,124,246,0.4);
         }
-
         .generate-btn:disabled { opacity: 0.3; cursor: not-allowed; box-shadow: none; }
         .generate-btn .material-symbols-rounded { font-size: 17px; }
-
         /* Output area */
         .output-area {
             flex: 1;
@@ -514,7 +453,6 @@
             background: var(--panel-right-bg);
             overflow: hidden;
         }
-
         /* Empty state */
         .empty-state {
             position: absolute;
@@ -526,7 +464,6 @@
             color: var(--fg-dim);
             gap: 12px;
         }
-
         .empty-state .empty-icon {
             width: 72px;
             height: 72px;
@@ -537,10 +474,8 @@
             align-items: center;
             justify-content: center;
         }
-
         .empty-state .material-symbols-rounded { font-size: 32px; }
         .empty-state p { font-size: 13px; font-weight: 500; color: var(--fg-muted); }
-
         /* Loading state */
         .loading-state {
             display: none;
@@ -553,9 +488,7 @@
             z-index: 5;
             gap: 20px;
         }
-
         .loading-state.visible { display: flex; }
-
         .spinner {
             width: 40px;
             height: 40px;
@@ -564,11 +497,8 @@
             border-radius: 100px;
             animation: spin 0.75s linear infinite;
         }
-
         @keyframes spin { to { transform: rotate(360deg); } }
-
         .loading-state h4 { font-size: 15px; font-weight: 700; color: var(--fg); }
-
         .progress-track {
             width: 200px;
             height: 2px;
@@ -576,14 +506,12 @@
             border-radius: 100px;
             overflow: hidden;
         }
-
         .progress-fill {
             height: 100%;
             background: linear-gradient(90deg, var(--accent), var(--accent-green));
             border-radius: 100px;
             transition: width 0.3s ease;
         }
-
         /* Final state */
         .final-state {
             display: none;
@@ -591,30 +519,24 @@
             inset: 0;
             flex-direction: column;
         }
-
         .final-state.visible { display: flex; }
-
         .preview-pane {
             flex: 1;
             background: #fff;
             overflow: hidden;
         }
-
         .preview-pane iframe {
             width: 100%;
             height: 100%;
             border: none;
         }
-
         .code-pane {
             display: none;
             flex: 1;
             background: #0D0D0F;
             overflow: hidden;
         }
-
         .code-pane.visible { display: flex; }
-
         .code-pane textarea {
             flex: 1;
             width: 100%;
@@ -629,7 +551,6 @@
             border: none;
             outline: none;
         }
-
         /* Auth Modal */
         .auth-modal {
             display: none;
@@ -641,9 +562,7 @@
             align-items: center;
             justify-content: center;
         }
-
         .auth-modal.visible { display: flex; }
-
         .auth-box {
             background: #1C1C20;
             border: 1px solid var(--border);
@@ -653,7 +572,6 @@
             position: relative;
             box-shadow: 0 32px 80px rgba(0,0,0,0.5);
         }
-
         .auth-close {
             position: absolute;
             top: 14px;
@@ -670,22 +588,18 @@
             color: var(--fg-muted);
             transition: background 0.15s;
         }
-
         .auth-close:hover { background: rgba(255,255,255,0.1); color: var(--fg); }
-
         .auth-box h2 {
             font-size: 22px;
             font-weight: 900;
             margin-bottom: 24px;
             color: var(--fg);
         }
-
         .auth-form {
             display: flex;
             flex-direction: column;
             gap: 10px;
         }
-
         .auth-input {
             width: 100%;
             padding: 11px 14px;
@@ -698,10 +612,8 @@
             background: rgba(255,255,255,0.04);
             color: var(--fg);
         }
-
         .auth-input::placeholder { color: var(--fg-dim); }
         .auth-input:focus { border-color: var(--accent); }
-
         .auth-submit {
             width: 100%;
             padding: 12px;
@@ -717,16 +629,13 @@
             transition: opacity 0.2s;
             box-shadow: 0 4px 16px rgba(139,124,246,0.3);
         }
-
         .auth-submit:hover { opacity: 0.9; }
-
         .auth-switch {
             text-align: center;
             margin-top: 14px;
             font-size: 12px;
             color: var(--fg-muted);
         }
-
         .auth-switch button {
             font-weight: 700;
             color: var(--accent);
@@ -736,9 +645,7 @@
             font-family: 'Outfit', sans-serif;
             font-size: 12px;
         }
-
         .auth-switch button:hover { text-decoration: underline; }
-
         .auth-error {
             display: none;
             color: #F87171;
@@ -746,36 +653,27 @@
             text-align: center;
             margin-top: 8px;
         }
-
         /* ── JS-driven state classes (used by script.js) ── */
         .hidden { display: none !important; }
-
         /* When upload area has images — disable click-to-open behavior visually */
         .upload-zone.has-image { cursor: default; }
         .upload-zone.has-image:hover { border-color: var(--border); background: rgba(255,255,255,0.02); }
         .upload-zone.has-image .upload-placeholder { transform: none !important; }
-
         /* Preview container: script uses .hidden class to toggle */
         #previewContainer.hidden { display: none !important; }
         #previewContainer:not(.hidden) { display: block !important; }
-
         /* uploadContent: script toggles .hidden */
         #uploadContent.hidden { display: none !important; }
-
         /* loadingState: script removes/adds .hidden */
         #loadingState.hidden { display: none !important; }
         #loadingState:not(.hidden) { display: flex !important; }
-
         /* finalState: script removes/adds .hidden */
         #finalState.hidden { display: none !important; }
         #finalState:not(.hidden) { display: flex !important; }
-
         /* resultBox: script removes .hidden */
         #resultBox.hidden { display: none !important; }
-
         /* profile dropdown: script uses .hidden */
         #profileDropdown.hidden { display: none !important; }
-
         /* gallery images */
         .gallery-img {
             width: 100%;
@@ -784,7 +682,6 @@
             border-radius: 10px;
             border: 1px solid var(--border);
         }
-
         .doc-preview {
             display: flex;
             flex-direction: column;
@@ -796,7 +693,6 @@
             border-radius: 10px;
             border: 1px solid var(--border);
         }
-
         /* drag-over visual */
         .upload-zone.dragover {
             border-color: var(--accent) !important;
@@ -805,11 +701,8 @@
     </style>
 </head>
 <body>
-
     <div class="app-shell">
         <div class="app-window">
-
-            
             <header class="app-header">
                 <div class="header-left">
                     <div class="app-logo">
@@ -832,10 +725,8 @@
                         </button>
                     </div>
                 </div>
-
                 <div class="header-right">
                     <button id="navLoginBtn" class="sign-in-btn">Sign In</button>
-
                     <div id="profileDropdown" class="profile-dropdown">
                         <div class="profile-info">
                             <span class="material-symbols-rounded">account_circle</span>
@@ -850,17 +741,11 @@
                     </div>
                 </div>
             </header>
-
-            
             <main class="workspace">
-
-                
                 <section class="panel-left">
                     <div class="panel-label">Source Material</div>
-
                     <div id="uploadArea" class="upload-zone">
                         <input type="file" id="fileInput" accept="image/*,application/pdf,.doc,.docx" multiple hidden aria-hidden="true">
-
                         <div id="uploadContent" class="upload-placeholder">
                             <div class="upload-icon-circle">
                                 <span class="material-symbols-rounded">add_photo_alternate</span>
@@ -868,7 +753,6 @@
                             <h3>Drop sketch or file</h3>
                             <p>Images, PDFs, Word documents</p>
                         </div>
-
                         <div id="previewContainer" class="preview-container hidden">
                             <div id="imageGallery" class="image-gallery"></div>
                             <div class="preview-actions">
@@ -881,7 +765,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="instructions-panel">
                         <div class="instructions-header">
                             <div class="panel-label">Instructions</div>
@@ -896,15 +779,12 @@
                         <textarea id="rawTextInput" placeholder="'Use Tailwind', 'keep the table structure', 'output JSON'..."></textarea>
                     </div>
                 </section>
-
-                
                 <section class="panel-right">
                     <div class="output-toolbar">
                         <div class="output-tabs">
                             <button id="tabPreview" class="output-tab active">Preview</button>
                             <button id="tabCode" class="output-tab">Code</button>
                         </div>
-
                         <div class="toolbar-actions">
                             <button id="downloadExcelBtn" class="download-btn">
                                 <span class="material-symbols-rounded" style="font-size:15px;">download</span> Excel
@@ -921,7 +801,6 @@
                             </button>
                         </div>
                     </div>
-
                     <div id="resultBox" class="output-area">
                         <div id="emptyState" class="empty-state">
                             <div class="empty-icon">
@@ -929,7 +808,6 @@
                             </div>
                             <p>Upload a sketch and hit Generate</p>
                         </div>
-
                         <div id="loadingState" class="loading-state hidden">
                             <div class="spinner"></div>
                             <h4 id="loadingStatus">Analyzing Sketch...</h4>
@@ -937,7 +815,6 @@
                                 <div id="processingProgress" class="progress-fill" style="width:0%"></div>
                             </div>
                         </div>
-
                         <div id="finalState" class="final-state hidden">
                             <div id="previewPane" class="preview-pane">
                                 <iframe id="livePreviewFrame" sandbox="allow-scripts allow-modals allow-same-origin"></iframe>
@@ -948,12 +825,9 @@
                         </div>
                     </div>
                 </section>
-
             </main>
         </div>
     </div>
-
-    
     <div id="authModal" class="auth-modal hidden">
         <div class="auth-box">
             <button id="closeAuthModal" class="auth-close">
@@ -972,6 +846,5 @@
             <p id="authErrorMsg" class="auth-error"></p>
         </div>
     </div>
-
 </body>
 </html>
