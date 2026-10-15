@@ -6,7 +6,9 @@ const xlsx = require('xlsx')
 require('dotenv').config();
 const app = express();
 const port = process.env.PORT || 3000;
-app.use(cors())
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static('./')); 
 const storage = multer.memoryStorage();
 var upload = multer({ 
@@ -15,15 +17,15 @@ var upload = multer({
 });
 app.post('/api/extract', upload.array('images', 10), async (req, res) => {
     try {
-        if ((!req.files || req.files.length === 0) && !req.body.rawText) {
+        if ((!req.files || req.files.length === 0) && (!req.body || !req.body.rawText)) {
             return res.status(400).json({ error: 'No files or text provided' });
         }
         const apiKey = process.env.GEMINI_API_KEY;
         if (!apiKey) {
             return res.status(500).json({ error: 'Server configuration error: API key missing.' });
         }
-        var mode = req.body.mode || 'simple';
-        var taskType = req.body.taskType || 'code';
+        var mode = req.body?.mode || 'simple';
+        var taskType = req.body?.taskType || 'code';
         let prompt = '';
         if (taskType === 'excel') {
             prompt = `You are a precise data extraction specialist.
@@ -115,7 +117,7 @@ Follow the sketch closely. Your job is to build exactly what was drawn, cleanly 
         if (docText.length > 0) {
             prompt += `\n\nAdditionally, I have provided the following text extracted from Word documents to assist you:\n${docText}`;
         }
-        if (req.body.rawText) {
+        if (req.body?.rawText) {
             prompt += `\n\nHere is some raw text/instructions provided by the user:\n${req.body.rawText}`;
         }
         let requestBody = {
