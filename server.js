@@ -89,7 +89,7 @@ Follow the sketch closely. Your job is to build exactly what was drawn, cleanly 
         }
         let docText = '';
         const imageParts = [];
-        for (let file of req.files) {
+        for (let file of (req.files || [])) {
             const isWord = file.mimetype === 'application/msword' || 
                            file.mimetype === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || 
                            file.originalname.endsWith('.doc') || 
