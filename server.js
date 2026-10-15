@@ -128,18 +128,44 @@ Follow the sketch closely. Your job is to build exactly what was drawn, cleanly 
                 ]
             }]
         };
-        let response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'x-goog-api-key': apiKey
-            },
-            body: JSON.stringify(requestBody)
-        })
-        const data = await response.json();
-        if (!response.ok) {
-            console.error('Google API Error:', data.error);
-            throw new Error(data.error?.message || 'Google API returned an error');
+        const candidateModels = [
+            'gemini-3-flash-preview',
+            'gemini-flash-lite-latest',
+            'gemini-flash-latest',
+            'gemini-3.8-flash'
+        ];
+
+        let data = null;
+        let lastError = null;
+
+        for (const model of candidateModels) {
+            try {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-goog-api-key': apiKey
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+                const resJson = await response.json();
+                if (response.ok && resJson.candidates?.[0]?.content?.parts?.[0]?.text) {
+                    data = resJson;
+                    console.log(`Successfully generated content using model: ${model}`);
+                    break;
+                } else {
+                    lastError = resJson.error?.message || `HTTP ${response.status} from ${model}`;
+                    console.warn(`Model ${model} unavailable: ${lastError}. Trying next fallback...`);
+                }
+            } catch (err) {
+                lastError = err.message;
+                console.warn(`Request failed for ${model}: ${err.message}. Trying next fallback...`);
+            }
+        }
+
+        if (!data) {
+            console.error('All Gemini candidate models failed:', lastError);
+            throw new Error(lastError || 'All AI models are currently busy. Please try again in a moment.');
         }
         let text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
         if (taskType === 'excel') {
