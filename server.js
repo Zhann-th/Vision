@@ -58,7 +58,7 @@ STEP 3 — BUILD it:
 HARD RULES:
 1. Output a SINGLE complete HTML document. All CSS must be inside a <style> tag. All JS (if any) inside a <script> tag.
 2. Do NOT output markdown wrappers (\`\`\`html). Start directly with <!DOCTYPE html>.
-3. Use REAL placeholder photos from: https:
+3. Use REAL placeholder photos from Unsplash (e.g. https://images.unsplash.com).
 4. Use Google Fonts — pick one that matches the brand personality.
 5. Add smooth CSS transitions on hover states (buttons, cards, links).
 6. The result must be visually polished: proper spacing, consistent font sizing, clear hierarchy.
@@ -125,8 +125,8 @@ Follow the sketch closely. Your job is to build exactly what was drawn, cleanly 
                     ...imageParts
                 ]
             }]
-        }
-        let response = await fetch(`https:
+        };
+        let response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -169,6 +169,6 @@ Follow the sketch closely. Your job is to build exactly what was drawn, cleanly 
     }
 });
 app.listen(port, () => {
-    console.log(`Server is running at http:
+    console.log(`Server is running at http://localhost:${port}`);
     console.log('To stop the server, press Ctrl+C');
 });

@@ -1,9 +1,9 @@
-import { initializeApp } from "https:
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https:
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 const firebaseConfig = {
   apiKey: "AIzaSyA53x0EHDN4HeJqbmwN98Lb9V-0YG6k0Ic",
   authDomain: "olymp-portal.firebaseapp.com",
-  databaseURL: "https:
+  databaseURL: "https://olymp-portal-default-rtdb.firebaseio.com",
   projectId: "olymp-portal",
   storageBucket: "olymp-portal.firebasestorage.app",
   messagingSenderId: "310726558368",
@@ -217,8 +217,10 @@ extractBtn.addEventListener('click', async () => {
         formData.append('mode', document.getElementById('generationMode').value);
         formData.append('taskType', currentTaskType);
         processingProgress.style.width = '70%';
-        loadingStatus.textContent = 'Generating...';
-        let response = await fetch('https:
+        const apiUrl = (window.location.protocol.startsWith('http') && window.location.port)
+            ? '/api/extract'
+            : 'https://vision-backend-api.onrender.com/api/extract';
+        let response = await fetch(apiUrl, {
             method: 'POST',
             body: formData
         });
