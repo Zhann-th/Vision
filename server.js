@@ -126,7 +126,7 @@ Follow the sketch closely. Your job is to build exactly what was drawn, cleanly 
                 ]
             }]
         };
-        let response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent', {
+        let response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
